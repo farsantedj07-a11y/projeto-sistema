@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CP3 - Scanner de IA</title>
+    <style>
+        body { font-family: sans-serif; background: #000; color: #00ff00; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        .scanner-container { position: relative; width: 80%; max-width: 600px; height: 400px; border: 2px solid #00ff00; border-radius: 10px; background: rgba(0, 255, 0, 0.05); }
+        .target-box { position: absolute; border: 2px solid #fff; width: 100px; height: 100px; transition: 0.5s; display: flex; align-items: center; justify-content: center; font-size: 10px; color: white; background: rgba(255,255,255,0.1); }
+        .laser { position: absolute; width: 100%; height: 2px; background: rgba(0, 255, 0, 0.5); box-shadow: 0 0 10px #00ff00; animation: moveLaser 3s infinite linear; }
+        .info-panel { margin-top: 20px; text-align: center; font-family: 'Courier New', monospace; }
+        .btn-voltar { margin-top: 20px; color: #00ff00; text-decoration: none; border: 1px solid #00ff00; padding: 10px; border-radius: 5px; }
+        @keyframes moveLaser { 0% { top: 0; } 100% { top: 100%; } }
+    </style>
+</head>
+<body>
+
+    <div class="scanner-container" id="scanner">
+        <div class="laser"></div>
+        <div class="target-box" id="target">IDENTIFICANDO...</div>
+    </div>
+
+    <div class="info-panel">
+        <p>STATUS: ESCANEANDO QUADROS DO VÍDEO...</p>
+        <p>OBJETO DETECTADO: <span id="obj-name">---</span></p>
+    </div>
+
+    <a href="../index.html" class="btn-voltar">VOLTAR AO PAINEL</a>
+
+    <script>
+        const objects = ["PESSOA", "VEÍCULO", "FERRAMENTA", "CAPACETE", "ESTRUTURA", "CELULAR"];
+        const target = document.getElementById('target');
+        const objName = document.getElementById('obj-name');
+
+        function moveScanner() {
+            const x = Math.random() * (window.innerWidth * 0.5);
+            const y = Math.random() * 300;
+            const randomObj = objects[Math.floor(Math.random() * objects.length)];
+            
+            target.style.left = x + 'px';
+            target.style.top = y + 'px';
+            target.innerText = randomObj;
+            objName.innerText = randomObj;
+        }
+
+        setInterval(moveScanner, 1500);
+    </script>
+</body>
+</html>
+

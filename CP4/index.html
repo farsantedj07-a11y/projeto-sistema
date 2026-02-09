@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CP4 - Relatório de Itens</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a2e; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .card { background: white; width: 95%; max-width: 600px; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top: 5px solid #4ecca3; }
+        h1 { text-align: center; color: #16213e; font-size: 1.4rem; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f8f9fa; }
+        .total-row { font-weight: bold; background: #e8f5e9; font-size: 1.1rem; }
+        .btn-voltar { margin-top: 20px; text-decoration: none; color: #4ecca3; font-weight: bold; padding: 10px 20px; border: 2px solid #4ecca3; border-radius: 8px; transition: 0.3s; }
+        .btn-voltar:hover { background: #4ecca3; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>?? Relatório de Detecção IA</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item Identificado</th>
+                    <th>Qtd</th>
+                    <th>Valor Unit.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Capacetes de Segurança</td>
+                    <td>05</td>
+                    <td>R$ 45,00</td>
+                </tr>
+                <tr>
+                    <td>Veículos Pesados</td>
+                    <td>02</td>
+                    <td>R$ 150,00</td>
+                </tr>
+                <tr>
+                    <td>Ferramentas Manuais</td>
+                    <td>12</td>
+                    <td>R$ 25,00</td>
+                </tr>
+                <tr class="total-row">
+                    <td>TOTAL PROCESSADO</td>
+                    <td>19</td>
+                    <td>R$ 825,00</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="font-size: 0.8rem; color: #666; text-align: center;">Relatório gerado automaticamente via Integração CP1-CP4.</p>
+    </div>
+
+    <a href="../index.html" class="btn-voltar">Finalizar e Voltar ao Início</a>
+
+</body>
+</html>
+
