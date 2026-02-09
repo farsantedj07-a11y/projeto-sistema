@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciador CP - Oficial</title>
+    <style>
+        body { font-family: sans-serif; background: #0f172a; color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .btn-ligar { width: 100%; max-width: 500px; padding: 18px; background: #0088cc; border: none; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-bottom: 30px; }
+        .app-window { width: 100%; max-width: 700px; background: #1e293b; border-radius: 12px; margin-bottom: 20px; border: 1px solid #334155; overflow: hidden; }
+        .app-header { background: #111827; padding: 8px 15px; font-size: 0.7rem; font-family: monospace; display: flex; justify-content: space-between; border-bottom: 1px solid #334155; }
+        iframe { width: 100%; height: 300px; border: none; background: #000; }
+    </style>
+</head>
+<body>
+    <h1>Gerenciador CP</h1>
+    <button class="btn-ligar" onclick="ligarTodas()">? LIGAR TODAS AS PASTAS</button>
+    <div class="app-window"><div class="app-header" style="color:#4ade80">CP1_INTERFACE</div><iframe id="f1" src="about:blank"></iframe></div>
+    <div class="app-window"><div class="app-header" style="color:#60a5fa">CP2_PROCESSOR</div><iframe id="f2" src="about:blank"></iframe></div>
+    <div class="app-window"><div class="app-header" style="color:#a855f7">CP3_STORAGE</div><iframe id="f3" src="about:blank"></iframe></div>
+    <div class="app-window"><div class="app-header" style="color:#fbbf24">CP4_RESULT</div><iframe id="f4" src="about:blank"></iframe></div>
+    <script>
+        function ligarTodas() {
+            document.getElementById('f1').src = 'CP1/index.html';
+            document.getElementById('f2').src = 'CP2/index.html';
+            document.getElementById('f3').src = 'CP3/index.html';
+            document.getElementById('f4').src = 'CP4/index.html';
+        }
+    </script>
+</body>
+</html>
+
