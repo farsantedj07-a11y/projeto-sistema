@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EXTENSOR</title>
+
+<style>
+body{
+  margin:0;
+  background:#000;
+  color:#0f0;
+  font-family:Arial,Helvetica,sans-serif;
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+}
+
+.topbar{
+  background:#020;
+  padding:10px;
+  text-align:center;
+  border-bottom:2px solid #0f0;
+}
+
+button{
+  padding:8px 16px;
+  margin:4px;
+  background:#000;
+  color:#0f0;
+  border:1px solid #0f0;
+  cursor:pointer;
+}
+
+.grid{
+  flex:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:1fr 1fr;
+  gap:2px;
+}
+
+iframe{
+  width:100%;
+  height:100%;
+  border:none;
+  background:#111;
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+  <button onclick="ligarTodas()">LIGAR TODAS</button>
+</div>
+
+<div class="grid">
+  <iframe id="cp1"></iframe>
+  <iframe id="cp2"></iframe>
+  <iframe id="cp3"></iframe>
+  <iframe id="cp4"></iframe>
+</div>
+
+<script>
+
+/* pastas que o EXTENSOR executa */
+const CPs = ["CP1","CP2","CP3","CP4"];
+
+/* encontra automaticamente um index dentro da pasta */
+async function encontrarEntrada(pasta){
+  const nomes = ["index.html","Index.html","INDEX.html","main.html"];
+
+  for(const nome of nomes){
+    try{
+      const resp = await fetch(`${pasta}/${nome}`, {method:"HEAD"});
+      if(resp.ok) return `${pasta}/${nome}`;
+    }catch(e){}
+  }
+
+  return null;
+}
+
+/* liga todas as CPs reais */
+async function ligarTodas(){
+
+  for(let i=0;i<CPs.length;i++){
+
+    const pasta = CPs[i];
+    const frame = document.getElementById(`cp${i+1}`);
+
+    const entrada = await encontrarEntrada(pasta);
+
+    if(entrada){
+      frame.src = entrada;
+    }else{
+      frame.srcdoc = `
+        <body style="background:#000;color:red;
+        display:flex;align-items:center;justify-content:center;
+        font-family:Arial">
+        ${pasta} sem arquivo inicial
+        </body>
+      `;
+    }
+  }
+
+  console.log("EXTENSOR ATIVO ? tudo que existe nas pastas foi executado.");
+}
+
+</script>
+
+</body>
+</html>
+
+
