@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Real HTML5</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-[#0d0d0d] text-[#CCFF00] font-mono h-screen w-screen overflow-hidden m-0 p-0">
+
+    <div class="h-full w-full flex flex-col relative">
+        <div class="flex items-center justify-between px-6 py-3 shrink-0">
+            <div class="flex items-center gap-3">
+                <div id="led" class="w-2 h-2 rounded-full bg-[#333]"></div>
+                <span id="status-text" class="text-xs tracking-[0.3em] text-[#444]">OFF</span>
+            </div>
+        </div>
+
+        <div class="flex-1 px-4 pb-2">
+            <div class="flex-1 h-full bg-[#111] border-2 border-[#333] rounded-xl flex items-center justify-center p-6 text-center">
+                <h2 id="mp3-display" class="text-3xl md:text-5xl font-bold text-[#333]">---</h2>
+            </div>
+        </div>
+
+        <div class="px-6 py-3 shrink-0">
+            <div class="flex items-center justify-center gap-3">
+                
+                <button id="btn-bt" onclick="conectarBluetooth()" class="w-14 h-14 rounded-lg bg-[#1a1a1a] border-2 border-[#444] flex items-center justify-center">
+                    <i data-lucide="bluetooth" class="w-6 h-6 text-[#666]"></i>
+                </button>
+
+                <button onclick="document.getElementById('file-in').click()" class="w-14 h-14 rounded-lg bg-[#1a1a1a] border-2 border-[#444] flex items-center justify-center">
+                    <i data-lucide="upload" class="w-6 h-6 text-[#666]"></i>
+                </button>
+
+                <button id="btn-power" onclick="togglePower()" class="w-14 h-14 rounded-lg bg-[#1a1a1a] border-2 border-[#444] flex items-center justify-center transition-all">
+                    <i data-lucide="power" class="w-6 h-6 text-[#666]"></i>
+                </button>
+
+                <button id="btn-play" onclick="playPauseMP3()" class="w-14 h-14 rounded-lg bg-[#1a1a1a] border-2 border-[#444] flex items-center justify-center">
+                    <i id="play-icon" data-lucide="play" class="w-6 h-6 text-[#666]"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="flex-1 px-4 pb-4">
+            <div class="flex-1 h-full bg-[#111] border-2 border-[#333] rounded-xl flex items-center justify-center p-6 text-center">
+                <h2 id="mp4-display" class="text-3xl md:text-5xl font-bold text-[#333]">---</h2>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="file-in" class="hidden" accept=".mp3" onchange="carregarArquivoMP3(this)">
+    <audio id="player-audio"></audio>
+
+    <script>
+        lucide.createIcons();
+        let ligado = false;
+        const player = document.getElementById('player-audio');
+
+        function togglePower() {
+            ligado = !ligado;
+            const btnPwr = document.getElementById('btn-power');
+            const d1 = document.getElementById('mp3-display');
+            const d2 = document.getElementById('mp4-display');
+            const led = document.getElementById('led');
+            const status = document.getElementById('status-text');
+
+            if(ligado) {
+                btnPwr.classList.replace('bg-[#1a1a1a]', 'bg-[#CCFF00]');
+                led.classList.replace('bg-[#333]', 'bg-[#CCFF00]');
+                status.innerText = "ON AIR"; status.classList.replace('text-[#444]', 'text-[#CCFF00]');
+                d1.innerText = "AGUARDANDO MP3..."; d1.style.color = "#CCFF00";
+                d2.innerText = "AGUARDANDO MP4..."; d2.style.color = "#8B00FF";
+            } else {
+                location.reload();
+            }
+            lucide.createIcons();
+        }
+
+        // ESSA FUNÇÃO TOCA O MP3 QUE VOCÊ ENVIOU
+        function carregarArquivoMP3(input) {
+            if(!ligado) return;
+            const arquivo = input.files[0];
+            if(arquivo) {
+                player.src = URL.createObjectURL(arquivo);
+                document.getElementById('mp3-display').innerText = arquivo.name.replace('.mp3', '').toUpperCase();
+                // Ativa os ícones de play
+                document.querySelectorAll('i[data-lucide="play"], i[data-lucide="pause"]').forEach(el => el.style.color = "#CCFF00");
+            }
+        }
+
+        function playPauseMP3() {
+            if(!ligado || !player.src) return;
+            const icone = document.getElementById('play-icon');
+            
+            if(player.paused) {
+                player.play();
+                icone.setAttribute('data-lucide', 'pause');
+            } else {
+                player.pause();
+                icone.setAttribute('data-lucide', 'play');
+            }
+            lucide.createIcons();
+        }
+
+        // WEB BLUETOOTH REAL
+        async function conectarBluetooth() {
+            if(!ligado) return;
+            try {
+                const device = await navigator.bluetooth.requestDevice({ acceptAllDevices: true });
+                document.getElementById('btn-bt').classList.replace('bg-[#1a1a1a]', 'bg-[#8B00FF]');
+                document.getElementById('mp3-display').innerText = "BT: " + device.name;
+            } catch(err) {
+                alert("Para o Bluetooth funcionar, o site precisa ser HTTPS (GitHub Pages). O MP3 local continua funcionando normal!");
+            }
+        }
+    </script>
+</body>
+</html>
+
