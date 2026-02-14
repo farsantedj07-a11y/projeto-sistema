@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Real Fix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .glow-green { text-shadow: 0 0 20px #CCFF00; color: #CCFF00 !important; }
+        .glow-purple { text-shadow: 0 0 20px #8B00FF; color: #8B00FF !important; }
+    </style>
+</head>
+<body class="bg-[#0d0d0d] text-[#CCFF00] font-mono h-screen w-screen overflow-hidden m-0 p-0">
+
+    <div class="h-full w-full flex flex-col">
+        <div class="px-6 py-3 flex items-center gap-3">
+            <div id="led" class="w-2 h-2 rounded-full bg-[#333]"></div>
+            <span id="st-txt" class="text-xs tracking-widest text-[#333]">OFF</span>
+        </div>
+
+        <div class="flex-1 px-4 pb-2">
+            <div class="h-full bg-[#111] border-2 border-[#333] rounded-xl flex items-center justify-center p-6">
+                <h2 id="d-mp3" class="text-3xl md:text-5xl font-bold text-[#222] uppercase text-center">---</h2>
+            </div>
+        </div>
+
+        <div class="px-6 py-4 flex justify-center gap-4 bg-[#0a0a0a] border-y border-[#1a1a1a]">
+            <button id="b-bt" onclick="btClick()" class="w-16 h-16 rounded-xl bg-[#1a1a1a] border-2 border-[#333] flex items-center justify-center transition-all">
+                <i id="i-bt" data-lucide="bluetooth" class="w-8 h-8 text-[#444]"></i>
+            </button>
+
+            <button onclick="document.getElementById('f-in').click()" class="w-16 h-16 rounded-xl bg-[#1a1a1a] border-2 border-[#333] flex items-center justify-center">
+                <i data-lucide="upload" class="w-8 h-8 text-[#444]"></i>
+            </button>
+
+            <button id="b-pwr" onclick="pwrClick()" class="w-16 h-16 rounded-xl bg-[#1a1a1a] border-2 border-[#333] flex items-center justify-center transition-all">
+                <i id="i-pwr" data-lucide="power" class="w-8 h-8 text-[#444]"></i>
+            </button>
+
+            <button id="b-ply" onclick="plyClick()" class="w-16 h-16 rounded-xl bg-[#1a1a1a] border-2 border-[#333] flex items-center justify-center">
+                <i id="i-ply" data-lucide="play" class="w-8 h-8 text-[#444]"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 px-4 pt-2 pb-4">
+            <div class="h-full bg-[#111] border-2 border-[#333] rounded-xl flex items-center justify-center p-6">
+                <h2 id="d-mp4" class="text-3xl md:text-5xl font-bold text-[#222] uppercase text-center">---</h2>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="f-in" class="hidden" accept=".mp3" onchange="fileUp(this)">
+    <audio id="aud"></audio>
+
+    <script>
+        lucide.createIcons();
+        let on = false;
+        const player = document.getElementById('aud');
+
+        function pwrClick() {
+            on = !on;
+            const btn = document.getElementById('b-pwr');
+            const d1 = document.getElementById('d-mp3');
+            const d2 = document.getElementById('d-mp4');
+            
+            if(on) {
+                btn.style.backgroundColor = "#CCFF00";
+                document.getElementById('i-pwr').style.color = "#000";
+                document.getElementById('led').style.backgroundColor = "#CCFF00";
+                document.getElementById('st-txt').innerText = "ON AIR";
+                document.getElementById('st-txt').style.color = "#CCFF00";
+                d1.innerText = "ESCOLHA MP3";
+                d1.classList.add('glow-green');
+                d2.innerText = "AGUARDANDO MP4";
+                d2.classList.add('glow-purple');
+            } else {
+                window.location.reload();
+            }
+        }
+
+        function fileUp(input) {
+            if(!on) return;
+            const file = input.files[0];
+            if(file) {
+                player.src = URL.createObjectURL(file);
+                const display = document.getElementById('d-mp3');
+                display.innerText = file.name.replace('.mp3', '').toUpperCase();
+                display.classList.add('glow-green'); // Garante que o nome fique aceso
+                document.getElementById('i-ply').style.color = "#CCFF00";
+            }
+        }
+
+        function plyClick() {
+            if(!on || !player.src) return;
+            if(player.paused) {
+                player.play();
+                document.getElementById('i-ply').style.color = "#fff";
+            } else {
+                player.pause();
+                document.getElementById('i-ply').style.color = "#CCFF00";
+            }
+        }
+
+        async function btClick() {
+            if(!on) return;
+            
+            // FORÇA A COR ROXA NO MOMENTO DO CLIQUE
+            const btn = document.getElementById('b-bt');
+            const icon = document.getElementById('i-bt');
+            btn.style.backgroundColor = "#8B00FF";
+            btn.style.borderColor = "#CCFF00";
+            icon.style.color = "#CCFF00";
+
+            try {
+                // CHAMA O RÁDIO REAL DO CELULAR/PC
+                const device = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true
+                });
+                document.getElementById('d-mp3').innerText = "BT: " + device.name;
+            } catch (err) {
+                console.log("Bluetooth parou:", err);
+                // Mesmo se der erro, o botão continuará roxo agora.
+            }
+        }
+    </script>
+</body>
+</html>
+
